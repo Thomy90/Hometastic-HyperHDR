@@ -1,0 +1,20 @@
+services:
+  hyperhdr:
+    image: "${IMAGE}"
+    container_name: "hyperhdr"
+    restart: "always"
+    networks:
+      - "reverse-proxy"
+    ports:
+      - "9091:8090"
+    command:
+      - "--userdata=/data"
+      - "--verbose"
+    volumes:
+      - "/opt/hyperhdr/data/:/data/"
+    devices:
+      - /dev/video0
+
+networks:
+  reverse-proxy:
+    external: true

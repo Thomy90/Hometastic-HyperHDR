@@ -1,6 +1,6 @@
 services:
   hyperhdr:
-    image: "${IMAGE}"
+    image: "thomy90/hyperhdr:${IMAGE_VERSION}"
     container_name: "hyperhdr"
     restart: "always"
     networks:
@@ -11,7 +11,7 @@ services:
       - "--userdata=/data"
       - "--verbose"
     volumes:
-      - "/opt/hyperhdr/data/:/data/"
+      - "./data/:/data/"
     devices:
       - /dev/video0
 

@@ -1,4 +1,4 @@
-ARG BASE_IMAGE="debian:stable-slim"
+ARG BASE_IMAGE="debian:12.9-slim"
 
 FROM ${BASE_IMAGE}
 

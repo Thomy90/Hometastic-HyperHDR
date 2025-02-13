@@ -1,5 +1,17 @@
 #!/bin/bash
 
+# Default installation directory
+install_dir="$(pwd)"
+
+# Parse arguments
+while getopts "b:" opt; do
+  case ${opt} in
+    b ) install_dir=$OPTARG ;;
+    * ) echo "Usage: $0 [-b install_directory] [version]"; exit 1 ;;
+  esac
+done
+shift $((OPTIND -1))
+
 version=$1
 
 github_release_api="https://api.github.com/repos/awawa-dev/HyperHDR/releases"
@@ -68,6 +80,8 @@ distro_name=$(get_distro_name)
 download_url=$(get_download_url "$release_data" "$version" "$distro_name")
 echo "Download URL: $download_url"
 
-# Download binary
-wget -q $download_url
+# Download binary to the specified directory
+mkdir -p "$install_dir"
+wget -q -O "$install_dir/hyperhdr.deb" "$download_url"
+echo "Binary downloaded to $install_dir/hyperhdr.deb"
 

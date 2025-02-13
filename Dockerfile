@@ -1,4 +1,4 @@
-ARG BASE_IMAGE="debian:12.9-slim"
+ARG BASE_IMAGE="debian:bookworm-slim"
 
 FROM ${BASE_IMAGE}
 

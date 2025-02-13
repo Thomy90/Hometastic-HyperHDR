@@ -4,29 +4,70 @@ version=$1
 
 github_release_api="https://api.github.com/repos/awawa-dev/HyperHDR/releases"
 
-if [ -n "${version}" ]; then
+# Fetch the release data for a specific version
+fetch_release_data() {
+  local version=$1
 
-  wget --spider "${github_release_api}/tags/v${version}" 2>/dev/null
-  if [[ $? -ne 0 ]]; then
-    echo "Error: Version ${version} does not exist"
-    unset version
+  wget -qO- "${github_release_api}/tags/v${version}"
+}
+
+# Fetch the latest version from GitHub API
+fetch_latest_version() {
+  wget -qO- "${github_release_api}/latest" | grep '"tag_name":' | sed -E 's/.*"tag_name": "v?([^"]+)".*/\1/'
+}
+
+# Get the distribution name
+get_distro_name() {
+  . /etc/os-release && echo "$VERSION_CODENAME"
+}
+
+# Get the download URL from release data
+get_download_url() {
+  local release_data=$1
+  local version=$2
+  local distro_name=$3
+
+  # First try to find a distro-specific download URL
+  download_url=$(echo "$release_data" | grep "browser_download_url.*${distro_name}.*-$(uname -m).deb")
+
+  if [ -z "$download_url" ]; then
+    # If no distro-specific URL is found, try the generic Linux one
+    download_url=$(echo "$release_data" | grep "browser_download_url.*${version}-Linux-$(uname -m).deb")
   fi
 
-fi
+  # If no download URL found, exit with an error
+  if [ -z "$download_url" ]; then
+    echo "Error: No download URL found for ${distro_name} and architecture $(uname -m)"
+    exit 1
+  fi
 
-if [ -z "${version}" ]; then
-  version=$(wget -qO- ${github_release_api}/latest | grep '"tag_name":' | sed -E 's/.*"tag_name": "v?([^"]+)".*/\1/')
-  echo "Using latest version ${version}"
-fi
+  # Extract the URL
+  echo "$download_url" | sed -E 's/.*"browser_download_url": "([^"]+)".*/\1/'
+}
 
-distro_name=$(. /etc/os-release && echo "$VERSION_CODENAME")
 
-if wget -qO- ${github_release_api}/tags/v${version} | grep -q "${distro_name}.*-$(uname -m).deb"; then
-  download_url=$(wget -qO- ${github_release_api}/tags/v${version} | grep "browser_download_url.*${distro_name}.*-$(uname -m).deb" | sed -E 's/.*"browser_download_url": "([^"]+)".*/\1/')
+# Main logic
+if [ -n "${version}" ]; then
+  # Fetch the release data for the specified version
+  release_data=$(fetch_release_data "$version")
+
+  if [ -z "$release_data" ]; then
+    echo "Error: Version ${version} does not exist"
+    exit 1
+  fi
 else
-  download_url=$(wget -qO- ${github_release_api}/tags/v${version} | grep "browser_download_url.*${version}-Linux-$(uname -m).deb" | sed -E 's/.*"browser_download_url": "([^"]+)".*/\1/')
+  version=$(fetch_latest_version)
+  echo "Using latest version ${version}"
+  release_data=$(fetch_release_data "$version")
 fi
 
-wget $download_url
+# Get distribution name (e.g., bookworm)
+distro_name=$(get_distro_name)
 
+# Get the download URL
+download_url=$(get_download_url "$release_data" "$version" "$distro_name")
+echo "Download URL: $download_url"
+
+# Download binary
+wget -q $download_url
 

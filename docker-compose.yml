@@ -1,6 +1,6 @@
 services:
   hyperhdr:
-    image: "thomy90/hyperhdr:${IMAGE_VERSION}"
+    image: "thomy90/hyperhdr:${IMAGE_VERSION:-21.0.0.0beta2}"
     container_name: "hyperhdr"
     restart: "always"
     networks:

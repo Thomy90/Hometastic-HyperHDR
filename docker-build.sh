@@ -7,7 +7,7 @@ pushd "$(dirname "$0")" > /dev/null
 
 docker build \
   --rm \
-  --build-arg IMAGE_VERSION=${IMAGE_VERSION} \
+  --build-arg VERSION=${IMAGE_VERSION} \
   --tag thomy90/hyperhdr:${IMAGE_VERSION} \
   .
 

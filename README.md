@@ -33,12 +33,12 @@ ls /dev/video*
 If your capture device is properly connected, you should see it listed as /dev/video0 or similar. If not, check your device's connection.
 
 
-### 2. Run HyperHDR with Docker Compose
+### 4. Run HyperHDR with Docker Compose
 ```bash
 docker-compose up -d
 ```
 
-### 3. Access HyperHDR
+### 5. Access HyperHDR
 Once running, HyperHDR's web interface can be accessed at:
 ```
 http://localhost:9091

@@ -19,6 +19,20 @@ git clone https://github.com/Thomy90/Hometastic-HyperHDR.git
 cd Hometastic-HyperHDR
 ```
 
+### 2. Create Docker network
+```bash
+docker network create --opt com.docker.network.bridge.name=reverse-proxy reverse-proxy
+```
+This network is used not only for HyperHDR but also for additional Hometastic services that may require access to the reverse proxy.
+
+### 3. Check capture device
+Before starting the container, ensure that the USB capture device is accessible. You can do this by running the following command to check if the device is listed:
+```bash
+ls /dev/video*
+```
+If your capture device is properly connected, you should see it listed as /dev/video0 or similar. If not, check your device's connection.
+
+
 ### 2. Run HyperHDR with Docker Compose
 ```bash
 docker-compose up -d

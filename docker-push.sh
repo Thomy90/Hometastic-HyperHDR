@@ -1,10 +1,9 @@
-#!/bin/bash
+#!/bin/bash -e
 
-pushd "$(dirname "$0")" > /dev/null
+(
+    cd "$(dirname "$0")"
 
-[ -f .env ] && source .env
-[ -n "$IMAGE_VERSION" ] || { echo "Error: IMAGE_VERSION is not set!"; exit 1; }
+    [ -f .env ] && source .env
 
-docker push thomy90/hyperhdr:${IMAGE_VERSION}
-
-popd > /dev/null
+    docker push thomy90/hyperhdr:${IMAGE_VERSION:-latest}
+)

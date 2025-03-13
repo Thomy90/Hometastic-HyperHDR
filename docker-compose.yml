@@ -1,12 +1,12 @@
 services:
   hyperhdr:
-    image: "thomy90/hyperhdr:${IMAGE_VERSION:-21.0.0.0beta2}"
+    image: "thomy90/hyperhdr:${IMAGE_VERSION:-21.0.0.0}"
     container_name: "hyperhdr"
     restart: "always"
     networks:
       - "reverse-proxy"
-    ports:
-      - "9091:8090"  # Adjust according to your port you want to use
+    expose:
+      - "8090"
     command:
       - "--userdata=/data"
       - "--verbose"
@@ -14,6 +14,15 @@ services:
       - "./data/:/data/"
     devices:
       - /dev/video0  # Adjust according to your capture device
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.hyperhdr.rule=Host(`hyperhdr.home.tastic`)"
+      - "homepage.group=Media & Entertainment"
+      - "homepage.name=HyperHDR"
+      - "homepage.icon=hyperion.png"
+      - "homepage.href=https://hyperhdr.home.tastic"
+      - "homepage.description=Ambilight"
+
 
 networks:
   reverse-proxy:

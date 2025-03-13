@@ -1,6 +1,6 @@
 ARG BASE_IMAGE="debian:bookworm-slim"
 
-FROM ${BASE_IMAGE}
+FROM ${BASE_IMAGE} AS fetch
 
 ARG VERSION
 
@@ -10,10 +10,16 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
   wget \
   ca-certificates \
   && /download-deb.sh -b /tmp ${VERSION} \
-  && apt-get install -y --no-install-recommends \
+  && rm -rf /var/lib/apt/lists/* 
+
+
+FROM ${BASE_IMAGE}
+
+COPY --from=fetch /tmp/hyperhdr.deb /tmp/hyperhdr.deb
+
+RUN apt-get update && apt-get install -y --no-install-recommends \  
   /tmp/hyperhdr.deb \
   && rm -rf /var/lib/apt/lists/* \
-  && rm /download-deb.sh \
   && rm /tmp/hyperhdr.deb
 
 RUN apt-get update && apt-get install -y --no-install-recommends \

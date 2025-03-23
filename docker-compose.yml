@@ -1,6 +1,6 @@
 services:
   hyperhdr:
-    image: "thomy90/hyperhdr:${IMAGE_VERSION:-21.0.0.0}"
+    image: "thomy90/hyperhdr:${IMAGE_VERSION:-latest}"
     container_name: "hyperhdr"
     restart: "always"
     networks:
@@ -13,7 +13,7 @@ services:
     volumes:
       - "./data/:/data/"
     devices:
-      - /dev/video0  # Adjust according to your capture device
+      - "${CAPTURE_DEVICE-/dev/video0}"
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.hyperhdr.rule=Host(`hyperhdr.home.tastic`)"

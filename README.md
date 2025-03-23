@@ -32,16 +32,39 @@ ls /dev/video*
 ```
 If your capture device is properly connected, you should see it listed as /dev/video0 or similar. If not, check your device's connection.
 
+### 4. Rename and Configure the Environment File  
 
-### 4. Run HyperHDR with Docker Compose
+The project includes an `example.env` file that contains default environment variables. You need to rename it to `.env` and adjust the values if necessary:
+
+```bash
+cp example.env .env
+```
+Open `.env` in a text editor and modify the variables to match your setup.
+
+### 5. Run HyperHDR with Docker Compose
+
+Hometastic environment
 ```bash
 docker-compose up -d
 ```
 
-### 5. Access HyperHDR
-Once running, HyperHDR's web interface can be accessed at:
+Insecure mode
+```bash
+docker compose -f docker-compose.yml -f docker-compose.insecure.yml up -d
 ```
-http://localhost:9091
+
+### 6. Access HyperHDR
+
+Once running, HyperHDR's web interface can be accessed at:
+
+Hometastic environment
+```
+https://hyperhdr.home.tastic
+```
+
+Insecure mode
+```
+http://localhost:8090
 ```
 
 ## Resources

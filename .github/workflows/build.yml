@@ -33,7 +33,7 @@ jobs:
           platforms: |
             linux/amd64
             linux/arm64
-          push: false
+          push: ${{ github.ref_type == 'tag' }}
           build-args: |
             VERSION=${{ env.VERSION }}
           tags: |

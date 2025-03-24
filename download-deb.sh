@@ -59,7 +59,7 @@ get_download_url() {
 
 
 # Main logic
-if [ -n "${version}" ]; then
+if [ -n "${version}" ] && [ "${version}" != "latest" ]; then
   # Fetch the release data for the specified version
   release_data=$(fetch_release_data "$version")
 

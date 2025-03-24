@@ -1,10 +1,10 @@
-name: Build and Push
+name: build
 
 on:
   push:
 
 jobs:
-  docker:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Set up QEMU

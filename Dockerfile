@@ -1,4 +1,4 @@
-ARG BASE_IMAGE="debian:bookworm-slim"
+ARG BASE_IMAGE="debian:trixie-slim"
 
 FROM ${BASE_IMAGE} AS fetch
 
@@ -25,6 +25,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 RUN apt-get update && apt-get install -y --no-install-recommends \
   libx11-6 \
   libasound2 \
+  libbrotli1 \
   && rm -rf /var/lib/apt/lists/*
 
 EXPOSE 8090 8092

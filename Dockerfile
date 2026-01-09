@@ -1,4 +1,4 @@
-ARG BASE_IMAGE="debian:trixie-slim"
+ARG BASE_IMAGE="dhi.io/debian-base:trixie-debian13"
 
 FROM ${BASE_IMAGE} AS fetch
 
